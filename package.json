@@ -1,0 +1,17 @@
+{
+  "name": "fast-foss-game-ee31",
+  "description": "Race game for euskal encounter 31 fast foss game",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "live-server",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.45.0",
+    "live-server": "^1.2.2"
+  }
+}
