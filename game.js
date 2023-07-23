@@ -41,6 +41,11 @@ class FastFossGame23 extends Phaser.Scene {
         this.userObjects[0].cursors = this.input.keyboard.createCursorKeys();
         this.userObjects[1].cursors = this.createUserTwoKeys();
         GAME.running = true
+        GAME.methods = {
+            restart: () => {
+                this.restart()
+            }
+        }
     }
 
     createUserTwoKeys () {
@@ -158,7 +163,7 @@ class FastFossGame23 extends Phaser.Scene {
             if (car.body === collision.bodyA || car.body === collision.bodyB) {
                 GAME.running = false
                 setTimeout(() => {
-                    alert(`Winner P${i+1}`)
+                    GAME.uiMethods.showFinish(`Player ${i+1}`)
                     this.restart()
                 }, 100)
             }
@@ -175,7 +180,6 @@ class FastFossGame23 extends Phaser.Scene {
             GAME.running = true
         }, 200)
     }
-
 }
 
 const config = {
