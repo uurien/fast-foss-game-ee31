@@ -1,3 +1,5 @@
+GAME = typeof GAME === 'undefined' ? {} : GAME;
+
 class FastFossGame23 extends Phaser.Scene {
     userObjects =[{
         vec: Phaser.Physics.Matter.Matter.Vector,
@@ -19,20 +21,13 @@ class FastFossGame23 extends Phaser.Scene {
     }]
 
     preload () {
-        this.load.image('car0', 'assets/car.png');
-        this.load.image('car1', 'assets/car2.png');
-        this.load.image('green', 'assets/green.png');
-        this.load.image('road', 'assets/road.png');
-        this.load.image('recta1', 'assets/recta-1.png');
-        this.load.image('recta2', 'assets/recta-2.png');
-        this.load.image('recta3', 'assets/recta-3.png');
-        this.load.image('recta4', 'assets/recta-4.png');
-        this.load.image('curvaex1', 'assets/curva-1.png');
-        this.load.image('curvaex2', 'assets/curva-2.png');
-        this.load.image('curvaex3', 'assets/curva-3.png');
-        this.load.image('curvaex4', 'assets/curva-4.png');
-        this.load.image('curvain1', 'assets/curva-5.png');
-        this.load.image('curvain2', 'assets/curva-6.png');
+        this.load.image('car-1', 'assets/car-1.png');
+        this.load.image('car-2', 'assets/car-2.png');
+        this.load.image('lift', 'assets/lift.png');
+        this.load.image('column', 'assets/column.png');
+        this.load.image('trolley-1', 'assets/trolley-1.png');
+        this.load.image('trolley-2', 'assets/trolley-2.png');
+        this.load.image('line-1', 'assets/line-1.png');
     }
 
     create () {
@@ -42,10 +37,10 @@ class FastFossGame23 extends Phaser.Scene {
         this.createUser(1);
 
         this.matter.world.setBounds(0, 0, 800, 640);
-        this.make
 
         this.userObjects[0].cursors = this.input.keyboard.createCursorKeys();
         this.userObjects[1].cursors = this.createUserTwoKeys();
+        GAME.running = true
     }
 
     createUserTwoKeys () {
@@ -57,7 +52,7 @@ class FastFossGame23 extends Phaser.Scene {
     }
     createUser (userIndex) {
         const userObject = this.userObjects[userIndex]
-        const car = this.matter.add.image(userObject.start.x, userObject.start.y, `car${userIndex}`);
+        const car = this.matter.add.image(userObject.start.x, userObject.start.y, `trolley-${userIndex + 1}`);
         car.setAngle(-90)
         car.setFrictionAir(0.2);
         car.setMass(10);
@@ -65,6 +60,7 @@ class FastFossGame23 extends Phaser.Scene {
     }
 
     update () {
+        if (!GAME.running) return
         this.updateCar(0)
         this.updateCar(1)
     }
@@ -99,55 +95,87 @@ class FastFossGame23 extends Phaser.Scene {
         // this.baselayer = this.add.layer()
         for (let y = 0; y < 20; y++) {
             for (let x = 0; x < 25; x++) {
-                let pictureNumber
+                let fieldId
                 if (map[y] && map[y][x]) {
-                    pictureNumber = map[y][x]
+                    fieldId = map[y][x]
                 } else {
-                    pictureNumber = 0
+                    fieldId = 0
                 }
-                switch (pictureNumber) {
-                    case 1:
-                        this.matter.add.image(16 + x*32, 16 + y*32, 'green', null, { isStatic: true })
+                const carId = Math.random() > .5 ? 1 : 2
+                let car
+                let line
+                switch (fieldId) {
+                    case 'c1':
+                        this.matter.add.image(16 + x*32, 16 + y*32, `car-${carId}`, null, { isStatic: true })
                         break;
-                    case 2:
-                         this.add.image(16 + x*32, 16 + y*32, 'recta1')
+                    case 'c2':
+                        car = this.matter.add.image(16 + x*32, 16 + y*32, `car-${carId}`, null, { isStatic: true })
+                        car.setAngle(-90)
                         break;
-                    case 3:
-                        this.add.image(16 + x*32, 16 + y*32, 'recta2')
+                    case 'c3':
+                        car = this.matter.add.image(16 + x*32, 16 + y*32, `car-${carId}`, null, { isStatic: true })
+                        car.setAngle(180)
                         break;
-                    case 4:
-                        this.add.image(16 + x*32, 16 + y*32, 'recta3')
+                    case 'c4':
+                        car = this.matter.add.image(16 + x*32, 16 + y*32, `car-${carId}`, null, { isStatic: true })
+                        car.setAngle(90)
                         break;
-                    case 5:
-                        this.add.image(16 + x*32, 16 + y*32, 'recta4')
+                    case 'li':
+                        const lift = this.matter.add.image(16 + x*32, 16 + y*32, `lift`, null, { isStatic: true })
+                        lift.setOnCollide((colData) => {
+                            this.onCollisionWithLift(colData)
+                        })
                         break;
-                    case 6:
-                        this.add.image(16 + x*32, 16 + y*32, 'curvaex1')
+                    case 'cl':
+                        this.matter.add.image(16 + x*32, 16 + y*32, `column`, null, { isStatic: true })
                         break;
-                    case 7:
-                        this.add.image(16 + x*32, 16 + y*32, 'curvaex2')
+                    case 'l1':
+                        this.add.image(16 + x*32, 16 + y*32, 'line-1')
                         break;
-                    case 8:
-                        this.add.image(16 + x*32, 16 + y*32, 'curvaex3')
+                    case 'l2':
+                        line = this.add.image(16 + x*32, 16 + y*32, 'line-1')
+                        line.setAngle(180)
                         break;
-                    case 9:
-                        this.add.image(16 + x*32, 16 + y*32, 'curvaex4')
+                    case 'l3':
+                        this.add.image(16 + x*32, 16 + y*32, 'line-1')
+                    case 'l2':
+                        line = this.add.image(16 + x*32, 16 + y*32, 'line-1')
+                        line.setAngle(90)
                         break;
-                    case 10:
-                        this.add.image(16 + x*32, 16 + y*32, 'curvain1')
-                        break;
-                    case 11:
-                        this.add.image(16 + x*32, 16 + y*32, 'curvain2')
+                    case 'l4':
+                    case 'l2':
+                        line = this.add.image(16 + x*32, 16 + y*32, 'line-1')
+                        line.setAngle(-90)
                         break;
                 }
-                if (pictureNumber === 1) {
-                    // const a = this.add.image(16 + x*32, 16 + y*32, 'green')
-                    // this.baselayer.add(a)
-                }
-//                this.platforms.create(16 + x*32, 16 + y*32, 'green').setScale(1).refreshBody();
             }
         }
     }
+
+    onCollisionWithLift (collision) {
+        for (let i = 0; i < this.userObjects.length; i++) {
+            const { car } = this.userObjects[i]
+            if (car.body === collision.bodyA || car.body === collision.bodyB) {
+                GAME.running = false
+                setTimeout(() => {
+                    alert(`Winner P${i+1}`)
+                    this.restart()
+                }, 100)
+            }
+        }
+    }
+
+    restart () {
+        for (let i = 0; i < this.userObjects.length; i++) {
+            const userObject = this.userObjects[i]
+            userObject.car.destroy()
+            this.createUser(i)
+        }
+        setTimeout(() => {
+            GAME.running = true
+        }, 200)
+    }
+
 }
 
 const config = {
