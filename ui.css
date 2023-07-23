@@ -1,0 +1,46 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+.ui {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 800px;
+    height: 640px;
+    background: white;
+}
+.ui h1 {
+    text-align: center;
+    margin-top: 2em;
+    text-transform: uppercase;
+}
+
+.main-button {
+    width: 80%;
+    height: 3em;
+    margin: 150px 10%;
+    background: white;
+    font-size: 2em;
+    border-radius: .3em;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.main-button:hover, .main-button:focus {
+    border: 1px solid #999;
+}
+.main-button:active {
+    box-shadow: none;
+    border: 1px solid #999;
+}
+
+.logo-euskal {
+    margin: 30px 235px 0 235px;
+}
+
+.hidden {
+    display: none !important;
+}
