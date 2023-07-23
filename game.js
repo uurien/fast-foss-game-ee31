@@ -23,6 +23,16 @@ class FastFossGame23 extends Phaser.Scene {
         this.load.image('car1', 'assets/car2.png');
         this.load.image('green', 'assets/green.png');
         this.load.image('road', 'assets/road.png');
+        this.load.image('recta1', 'assets/recta-1.png');
+        this.load.image('recta2', 'assets/recta-2.png');
+        this.load.image('recta3', 'assets/recta-3.png');
+        this.load.image('recta4', 'assets/recta-4.png');
+        this.load.image('curvaex1', 'assets/curva-1.png');
+        this.load.image('curvaex2', 'assets/curva-2.png');
+        this.load.image('curvaex3', 'assets/curva-3.png');
+        this.load.image('curvaex4', 'assets/curva-4.png');
+        this.load.image('curvain1', 'assets/curva-5.png');
+        this.load.image('curvain2', 'assets/curva-6.png');
     }
 
     create () {
@@ -32,6 +42,7 @@ class FastFossGame23 extends Phaser.Scene {
         this.createUser(1);
 
         this.matter.world.setBounds(0, 0, 800, 640);
+        this.make
 
         this.userObjects[0].cursors = this.input.keyboard.createCursorKeys();
         this.userObjects[1].cursors = this.createUserTwoKeys();
@@ -85,6 +96,7 @@ class FastFossGame23 extends Phaser.Scene {
 
     drawMap () {
         const map = GAME.map;
+        // this.baselayer = this.add.layer()
         for (let y = 0; y < 20; y++) {
             for (let x = 0; x < 25; x++) {
                 let pictureNumber
@@ -93,10 +105,43 @@ class FastFossGame23 extends Phaser.Scene {
                 } else {
                     pictureNumber = 0
                 }
-                console.log(pictureNumber)
+                switch (pictureNumber) {
+                    case 1:
+                        this.matter.add.image(16 + x*32, 16 + y*32, 'green', null, { isStatic: true })
+                        break;
+                    case 2:
+                         this.add.image(16 + x*32, 16 + y*32, 'recta1')
+                        break;
+                    case 3:
+                        this.add.image(16 + x*32, 16 + y*32, 'recta2')
+                        break;
+                    case 4:
+                        this.add.image(16 + x*32, 16 + y*32, 'recta3')
+                        break;
+                    case 5:
+                        this.add.image(16 + x*32, 16 + y*32, 'recta4')
+                        break;
+                    case 6:
+                        this.add.image(16 + x*32, 16 + y*32, 'curvaex1')
+                        break;
+                    case 7:
+                        this.add.image(16 + x*32, 16 + y*32, 'curvaex2')
+                        break;
+                    case 8:
+                        this.add.image(16 + x*32, 16 + y*32, 'curvaex3')
+                        break;
+                    case 9:
+                        this.add.image(16 + x*32, 16 + y*32, 'curvaex4')
+                        break;
+                    case 10:
+                        this.add.image(16 + x*32, 16 + y*32, 'curvain1')
+                        break;
+                    case 11:
+                        this.add.image(16 + x*32, 16 + y*32, 'curvain2')
+                        break;
+                }
                 if (pictureNumber === 1) {
                     // const a = this.add.image(16 + x*32, 16 + y*32, 'green')
-                    this.matter.add.image(16 + x*32, 16 + y*32, 'green', null, { isStatic: true })
                     // this.baselayer.add(a)
                 }
 //                this.platforms.create(16 + x*32, 16 + y*32, 'green').setScale(1).refreshBody();
