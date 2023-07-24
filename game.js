@@ -109,7 +109,6 @@ class FastFossGame23 extends Phaser.Scene {
                     fieldId = 0
                 }
                 const carId = Math.floor(Math.random() * 4) + 1
-                console.log('carId', carId)
                 let car
                 let line
                 switch (fieldId) {
@@ -204,4 +203,4 @@ const config = {
     scene: FastFossGame23
 };
 
-const game = new Phaser.Game(config);
+new Phaser.Game(config);
