@@ -23,6 +23,8 @@ class FastFossGame23 extends Phaser.Scene {
     preload () {
         this.load.image('car-1', 'assets/car-1.png');
         this.load.image('car-2', 'assets/car-2.png');
+        this.load.image('car-3', 'assets/car-3.png');
+        this.load.image('car-4', 'assets/car-4.png');
         this.load.image('lift', 'assets/lift.png');
         this.load.image('column', 'assets/column.png');
         this.load.image('trolley-1', 'assets/trolley-1.png');
@@ -106,7 +108,8 @@ class FastFossGame23 extends Phaser.Scene {
                 } else {
                     fieldId = 0
                 }
-                const carId = Math.random() > .5 ? 1 : 2
+                const carId = Math.floor(Math.random() * 4) + 1
+                console.log('carId', carId)
                 let car
                 let line
                 switch (fieldId) {
