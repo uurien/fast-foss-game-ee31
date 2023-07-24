@@ -38,12 +38,24 @@ class FastFossGame23 extends Phaser.Scene {
 
         this.matter.world.setBounds(0, 0, 800, 640);
 
-        this.userObjects[0].cursors = this.input.keyboard.createCursorKeys();
-        this.userObjects[1].cursors = this.createUserTwoKeys();
-        GAME.running = true
+        GAME.running = false
         GAME.methods = {
             restart: () => {
                 this.restart()
+            },
+            configureKeys: () => {
+                if (!GAME.ws) {
+                    this.userObjects[0].cursors = this.input.keyboard.createCursorKeys();
+                    this.userObjects[1].cursors = this.createUserTwoKeys();
+                } else {
+                    this.userObjects[GAME.player].cursors = this.input.keyboard.createCursorKeys();
+                    GAME.methods.onWsMessage = ({ data }) => {
+                        data = JSON.parse(data)
+                        if (data.message === 'UPDATE') {
+                            this.updateCarFromWs(data.player, data.keys)
+                        }
+                    }
+                }
             }
         }
     }
@@ -66,8 +78,12 @@ class FastFossGame23 extends Phaser.Scene {
 
     update () {
         if (!GAME.running) return
-        this.updateCar(0)
-        this.updateCar(1)
+        if (!GAME.ws) {
+            this.updateCar(0)
+            this.updateCar(1)
+        } else {
+            this.sendCurrentUserData()
+        }
     }
 
     updateCar (userIndex) {
@@ -87,10 +103,49 @@ class FastFossGame23 extends Phaser.Scene {
         }
     }
 
+    updateCarFromWs (userIndex, keys) {
+        const userObject = this.userObjects[userIndex]
+        const point1 = userObject.car.getTopRight();
+        const point2 = userObject.car.getBottomRight();
+        const speed = 0.005;
+        const angle = userObject.vec.angle(point1, point2);
+        const force = {x: Math.cos(angle) * speed, y: Math.sin(angle) * speed};
+
+        if (keys.up) {
+            userObject.car.thrust(0.01);
+            this.steerFromWs(userObject.vec.neg(force), userObject, keys);
+        } else if (keys.down) {
+            userObject.car.thrustBack(0.01);
+            this.steerFromWs(force, userObject, keys);
+        }
+    }
+
+    sendCurrentUserData () {
+        const userObject = this.userObjects[GAME.player]
+        const keys = {
+            up: userObject.cursors.up.isDown,
+            down: userObject.cursors.down.isDown,
+            left: userObject.cursors.left.isDown,
+            right: userObject.cursors.right.isDown,
+        }
+        GAME.ws.send(JSON.stringify({
+            message: 'UPDATE',
+            keys
+        }))
+    }
+
     steer(force, userObject) {
         if (userObject.cursors.left.isDown) {
             Phaser.Physics.Matter.Matter.Body.applyForce(userObject.car.body, userObject.car.getTopRight(), force);
         } else if (userObject.cursors.right.isDown) {
+            Phaser.Physics.Matter.Matter.Body.applyForce(userObject.car.body, userObject.car.getBottomRight(), userObject.vec.neg(force));
+        }
+    }
+
+    steerFromWs (force, userObject, keys) {
+        if (keys.left) {
+            Phaser.Physics.Matter.Matter.Body.applyForce(userObject.car.body, userObject.car.getTopRight(), force);
+        } else if (keys.right) {
             Phaser.Physics.Matter.Matter.Body.applyForce(userObject.car.body, userObject.car.getBottomRight(), userObject.vec.neg(force));
         }
     }

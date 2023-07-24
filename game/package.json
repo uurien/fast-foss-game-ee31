@@ -9,7 +9,7 @@
     "lint:fix": "eslint --fix"
   },
   "author": "",
-  "license": "ISC",
+  "license": "BSD-3-Clause",
   "devDependencies": {
     "eslint": "^8.45.0",
     "live-server": "^1.2.2"

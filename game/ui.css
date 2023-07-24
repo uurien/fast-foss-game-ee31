@@ -1,3 +1,6 @@
+* {
+    box-sizing: border-box;
+}
 body {
     margin: 0;
     padding: 0;
@@ -16,17 +19,18 @@ body {
     margin-top: 2em;
     text-transform: uppercase;
 }
-
-.main-button {
-    width: 80%;
-    height: 3em;
-    margin: 150px 10%;
+.button {
     background: white;
     font-size: 2em;
     border-radius: .3em;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     border: 1px solid #ccc;
     cursor: pointer;
+}
+.main-button {
+    width: 80%;
+    height: 3em;
+    margin: 150px 10%;
 }
 
 .main-button:hover, .main-button:focus {
@@ -43,4 +47,30 @@ body {
 
 .hidden {
     display: none !important;
+}
+
+.main-buttons {
+    width: 80%;
+    height: 3em;
+    margin: 150px 10% 100px;
+}
+.main-buttons .button {
+    width: 49%;
+    height: 2.5em;
+}
+
+.form-field {
+    font-size: 2em;
+    padding: .2em .5em;
+    border-radius: .3em;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border: 1px solid #ccc;
+    width: 250px;
+    margin: 0 275px;
+}
+
+.message {
+    text-align: center;
+    font-size: 1.3em;
+    margin-top: 2em;
 }
